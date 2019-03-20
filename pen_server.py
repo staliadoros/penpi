@@ -14,6 +14,6 @@ def stef():
 @app.route('/view')
 @app.route('/view/<user_name>')
 def sammy(user_name='default'):
-    return render_template('site/index.html', name=user_name)
+    return render_template('index.html', name=user_name)
 
 app.run(host='0.0.0.0',port=5000)
