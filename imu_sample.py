@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #import matplotlib.pyplot as plt
 from mpu9250 import mpu9250
-from time import sleep
 from time import time
 
 

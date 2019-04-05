@@ -1,6 +1,5 @@
-var {ipcRenderer, remote} = require('electron');  
-var main = remote.require("./main.js");
-var math = require('mathjs');
+
+
 
 // setup data series
 var x_data = {
@@ -30,13 +29,13 @@ var z_data = {
 
 // Listen for async-reply message from main process
 var datapoints = 0;
-ipcRenderer.on('stream_data', (event, arg) => {  
+function streamData(raw_data) {
 
     // increment datapoints count
     datapoints++;
     
     // parse the input stream
-    var accel_data = arg.trim().split('\t');
+    var accel_data = raw_data.trim().split('\t');
     window.myLine.data.datasets[0].data.push(accel_data[0]);
     window.myLine.data.datasets[1].data.push(accel_data[1]);
     window.myLine.data.datasets[2].data.push((accel_data[2] - 1.0));
@@ -70,13 +69,13 @@ ipcRenderer.on('stream_data', (event, arg) => {
         document.getElementById("uc-stats-value-" + dimension).innerHTML = sigma_str + sigma_val;
     }
 
-});
+};
 
 // set micro state
-ipcRenderer.on('set_state', (event, arg) => {  
+function setConnected() {
     
     // set of messaging for micro controller state
-    var failure = "Please connect a micro-controller";
+    var failure = "Failed to connect to IMU";
     var success = "Connected!";
     var connected = 'img/connected.svg';
     var disconnected = 'img/disconnected.svg';
@@ -90,9 +89,30 @@ ipcRenderer.on('set_state', (event, arg) => {
         document.getElementById('uc-status-txt').innerHTML = failure;
         document.getElementById('uc-status-img').src = disconnected;
     }
-});
+};
+
+function establishSocketIO() {
+
+    // establish socket connection to our own server
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    // set up callback for initial connection
+    socket.on('connect', function() {
+        socket.emit('initial_connect', {data: 'I\'m connected!'});
+    });
+
+    // set up callback for data stream
+    socket.on('new_data', handleData);
+}
+
+function handleData(message){
+    console.log('My data is here: ' + JSON.stringify(message))
+    emit('request_data')
+}
 
 function drawChart() {
+
+
 
         var randomScalingFactor = function() {
             return Math.round(Math.random() * 100);
