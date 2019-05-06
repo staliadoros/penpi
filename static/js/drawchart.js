@@ -1,4 +1,12 @@
-window.setInterval(emit('request_data'), 100);
+var connected=false;
+var socket = null;
+function request_data(){
+	if(connected){
+	    socket.emit('request_data');
+	}
+}
+
+window.setInterval(request_data, 100);
 
 
 // setup data series
@@ -35,10 +43,10 @@ function streamData(raw_data) {
     datapoints++;
     
     // parse the input stream
-    var accel_data = raw_data.trim().split('\t');
-    window.myLine.data.datasets[0].data.push(accel_data[0]);
-    window.myLine.data.datasets[1].data.push(accel_data[1]);
-    window.myLine.data.datasets[2].data.push((accel_data[2] - 1.0));
+    var accel_data = raw_data//.trim().split('\t');
+    window.myLine.data.datasets[0].data.push(accel_data['x']);
+    window.myLine.data.datasets[1].data.push(accel_data['y']);
+    window.myLine.data.datasets[2].data.push((accel_data['z'] - 1.0));
     window.myLine.data.labels.push(datapoints++);
     
     // shift the queue to keep a maximum length of 200, so we don't overload the graph
@@ -60,6 +68,7 @@ function streamData(raw_data) {
     console.log(window.myLine.data);
     
     // set statistics values
+	/*
     for (i = 0; i < 3; i++)
     {
         var dimension = 'x';
@@ -67,7 +76,7 @@ function streamData(raw_data) {
         var sigma_str = "&sigma;<sub>" + dimension.toString() + "</sub> ";
         var sigma_val = math.round(math.std(window.myLine.data.datasets[i].data), 6).toString();
         document.getElementById("uc-stats-value-" + dimension).innerHTML = sigma_str + sigma_val;
-    }
+    }*/
 
 };
 
@@ -94,7 +103,7 @@ function setConnected(arg=false) {
 function establishSocketIO() {
 
     // establish socket connection to our own server
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    socket = io.connect('http://' + document.domain + ':' + location.port);
 
     // set up callback for initial connection
     socket.on('connect', function() {
@@ -104,13 +113,17 @@ function establishSocketIO() {
     // set up callback for data stream
     socket.on('new_data', handleData);
 
+    connected=true;
+
     // set conn status
-    setConnected(true);
+    //setConnected(true);
 }
 
 function handleData(message){
 
-    console.log('My data is here: ' + JSON.stringify(message['x']));
+    if (window.myLine){
+    	streamData(message);
+    }
 
 }
 
