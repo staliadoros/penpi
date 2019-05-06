@@ -1,4 +1,4 @@
-
+window.setInterval(emit('request_data'), 100);
 
 
 // setup data series
@@ -72,7 +72,7 @@ function streamData(raw_data) {
 };
 
 // set micro state
-function setConnected() {
+function setConnected(arg=false) {
     
     // set of messaging for micro controller state
     var failure = "Failed to connect to IMU";
@@ -103,16 +103,18 @@ function establishSocketIO() {
 
     // set up callback for data stream
     socket.on('new_data', handleData);
+
+    // set conn status
+    setConnected(true);
 }
 
 function handleData(message){
-    console.log('My data is here: ' + JSON.stringify(message))
-    emit('request_data')
+
+    console.log('My data is here: ' + JSON.stringify(message['x']));
+
 }
 
 function drawChart() {
-
-
 
         var randomScalingFactor = function() {
             return Math.round(Math.random() * 100);

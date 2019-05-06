@@ -6,7 +6,6 @@ from mpu9250 import mpu9250
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
-
 imu = mpu9250(mpu_addr=0x69)
 
 @app.route('/')
@@ -38,8 +37,6 @@ def send_data():
     accel_data = list(imu.accel)
     accel_dict = dict(zip(axes, accel_data))
     emit('new_data', accel_dict)
-
-
 
 
 if __name__ == '__main__':
