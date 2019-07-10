@@ -89,8 +89,8 @@ function setConnected(arg=false) {
     connected = arg
     var failure = "Failed to connect to IMU";
     var success = "Connected!";
-    var connected_img = "/img/connected.svg";
-    var disconnected_img = "/img/disconnected.svg";
+    var connected_img = "/static/img/connected.svg";
+    var disconnected_img = "/static/img/disconnected.svg";
 
     // if connected, set the image and text to reflect
     if(arg){
