@@ -89,9 +89,9 @@ function setConnected(arg=false) {
     connected = arg
     var failure = "Failed to connect to IMU";
     var success = "Connected!";
-    var connected_img = 'img/connected.svg';
-    var disconnected_img = 'img/disconnected.svg';
-    
+    var connected_img = "{{ url_for('static', filename='img/connected.svg') }}";
+    var disconnected_img = "{{ url_for('static', filename='img/disconnected.svg') }}";
+
     // if connected, set the image and text to reflect
     if(arg){
         document.getElementById('uc-status-txt').innerHTML = success;
