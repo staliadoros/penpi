@@ -2,6 +2,10 @@
 var connected=false;
 var socket = null;
 
+// disconnect timer
+var disconnect_time = 0;
+var timeoutTimer = setInterval(checkConnected, 50);
+
 // requests data from the server if and only if we are connected to the server
 function request_data(){
 	if(connected){
@@ -82,6 +86,15 @@ function streamData(raw_data) {
 
 };
 
+function checkConnected(){
+    disconnect_time++;
+
+    // if this happens once every 50ms, then at disconnect_time = 20 we've waited 1 second
+    if (disconnect_time > 20){
+        setConnected(false);
+    }
+}
+
 // set micro state
 function setConnected(arg=false) {
     
@@ -94,6 +107,7 @@ function setConnected(arg=false) {
 
     // if connected, set the image and text to reflect
     if(arg){
+        disconnect_time = 0;
         document.getElementById('uc-status-txt').innerHTML = success;
         document.getElementById('uc-status-img').src = connected_img;
         }
