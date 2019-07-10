@@ -107,7 +107,6 @@ function setConnected(arg=false) {
 
     // if connected, set the image and text to reflect
     if(arg){
-        disconnect_time = 0;
         document.getElementById('uc-status-txt').innerHTML = success;
         document.getElementById('uc-status-img').src = connected_img;
         }
@@ -133,6 +132,7 @@ function establishSocketIO() {
 }
 
 function handleData(message){
+    disconnect_time = 0;
 
     if (!connected){
         setConnected(true);
