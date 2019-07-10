@@ -1,11 +1,13 @@
+// sets default connected state to false
 var connected=false;
 var socket = null;
+
+// requests data from the server if and only if we are connected to the server
 function request_data(){
 	if(connected){
 	    socket.emit('request_data');
 	}
 }
-
 window.setInterval(request_data, 100);
 
 
@@ -65,10 +67,10 @@ function streamData(raw_data) {
     
     // update the chart
     window.myLine.update();
-    console.log(window.myLine.data);
+    //console.log(window.myLine.data);
     
     // set statistics values
-	/*
+
     for (i = 0; i < 3; i++)
     {
         var dimension = 'x';
@@ -76,7 +78,7 @@ function streamData(raw_data) {
         var sigma_str = "&sigma;<sub>" + dimension.toString() + "</sub> ";
         var sigma_val = math.round(math.std(window.myLine.data.datasets[i].data), 6).toString();
         document.getElementById("uc-stats-value-" + dimension).innerHTML = sigma_str + sigma_val;
-    }*/
+    }
 
 };
 
@@ -84,19 +86,20 @@ function streamData(raw_data) {
 function setConnected(arg=false) {
     
     // set of messaging for micro controller state
+    connected = arg
     var failure = "Failed to connect to IMU";
     var success = "Connected!";
-    var connected = 'img/connected.svg';
-    var disconnected = 'img/disconnected.svg';
+    var connected_img = 'img/connected.svg';
+    var disconnected_img = 'img/disconnected.svg';
     
     // if connected, set the image and text to reflect
     if(arg){
         document.getElementById('uc-status-txt').innerHTML = success;
-        document.getElementById('uc-status-img').src = connected;
+        document.getElementById('uc-status-img').src = connected_img;
         }
     else{
         document.getElementById('uc-status-txt').innerHTML = failure;
-        document.getElementById('uc-status-img').src = disconnected;
+        document.getElementById('uc-status-img').src = disconnected_img;
     }
 };
 
@@ -108,12 +111,12 @@ function establishSocketIO() {
     // set up callback for initial connection
     socket.on('connect', function() {
         socket.emit('initial_connect', {data: 'I\'m connected!'});
+        connected = true;
+        //setConnected(true);
     });
 
     // set up callback for data stream
     socket.on('new_data', handleData);
-
-    connected=true;
 
     // set conn status
     //setConnected(true);
@@ -129,11 +132,7 @@ function handleData(message){
 
 function drawChart() {
 
-        var randomScalingFactor = function() {
-            return Math.round(Math.random() * 100);
-        };
-
-        var datapoints = [0, 20, 20, 60, 60, 120, NaN, 180, 120, 125, 105, 110, 170];
+        var datapoints = [];
 		var config = {
             type: 'line',
             data: {
