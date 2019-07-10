@@ -52,7 +52,7 @@ function streamData(raw_data) {
     window.myLine.data.labels.push(datapoints++);
     
     // shift the queue to keep a maximum length of 200, so we don't overload the graph
-    var maxLength = 100;
+    var maxLength = 20;
     var maxTime = 10000;
     if (window.myLine.data.datasets[0].data.length > maxLength)
         window.myLine.data.datasets[0].data.shift();
