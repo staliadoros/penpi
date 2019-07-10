@@ -111,18 +111,18 @@ function establishSocketIO() {
     // set up callback for initial connection
     socket.on('connect', function() {
         socket.emit('initial_connect', {data: 'I\'m connected!'});
-        connected = true;
-        //setConnected(true);
     });
 
     // set up callback for data stream
     socket.on('new_data', handleData);
 
-    // set conn status
-    //setConnected(true);
 }
 
 function handleData(message){
+
+    if (!connected){
+        setConnected(true);
+    }
 
     if (window.myLine){
     	streamData(message);
