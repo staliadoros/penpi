@@ -19,7 +19,10 @@ collect_active = False
 
 # background timer function
 def add_to_buffer():
+
+    global collect_active
     if collect_active:
+        print('appending data')
         signal_buffer.append(imu.accel)
 
 # background timer object
