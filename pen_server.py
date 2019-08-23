@@ -14,14 +14,16 @@ imu = mpu9250(mpu_addr=0x69)
 # global variables
 sample_rate = 1.0/80.0  # seconds
 signal_buffer = []
+collect_active = False
 
 
 # background timer function
 def add_to_buffer():
-    signal_buffer.append(imu.accel)
+    if collect_active:
+        signal_buffer.append(imu.accel)
 
 # background timer object
-signal_timer = threading.Timer(sample_rate, add_to_buffer)
+signal_timer = threading.Timer(sample_rate, add_to_buffer).start()
 
 @app.route('/')
 def hello_world():
@@ -52,14 +54,15 @@ def send_data():
 @app.route('/start_collect')
 def start_data_collection():
 
-    # pull signal buffer from global scope
+    # pull  params from global scope
     global signal_buffer
+    global collect_active
 
     # clear buffer
     signal_buffer = []
 
     # start timer
-    signal_timer.start()
+    collect_active = True
 
     return 'Started fresh data collection!'
 
@@ -68,11 +71,12 @@ def start_data_collection():
 @app.route('/stop_collect')
 def stop_data_collection():
 
-    # pull signal buffer from global scope
+    # pull params from global scope
     global signal_buffer
+    global collect_active
 
     # stop the timer
-    signal_timer.stop()
+    collect_active = False
 
     return signal_buffer
 
