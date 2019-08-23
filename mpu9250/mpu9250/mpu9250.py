@@ -90,7 +90,7 @@ class mpu9250(object):
 		self.write(MPU9250_ADDRESS, PWR_MGMT_1, 0x00)  # turn sleep mode off
 		sleep(0.2)
 		self.bus.write_byte_data(MPU9250_ADDRESS, PWR_MGMT_1, 0x01)  # auto select clock source
-		self.write(MPU9250_ADDRESS, ACCEL_CONFIG, ACCEL_2G)
+		self.write(MPU9250_ADDRESS, ACCEL_CONFIG, ACCEL_8G)
 		self.write(MPU9250_ADDRESS, GYRO_CONFIG, GYRO_250DPS)
 
 		# You have to enable the other chips to join the I2C network
@@ -107,7 +107,7 @@ class mpu9250(object):
 		self.write(AK8963_ADDRESS, AK8963_ASTC, 0)
 		
 		#normalization coefficients 
-		self.alsb = 2.0 / 32760 # ACCEL_2G
+		self.alsb = 8.0 / 32760 # ACCEL_8G
 		self.glsb = 250.0 / 32760 # GYRO_250DPS
 		self.mlsb = 4800.0 / 32760 # MAGNET range +-4800
 
