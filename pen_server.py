@@ -20,15 +20,16 @@ collect_active = False
 # background timer function
 def add_to_buffer():
 
-    print ('calling timer')
     global collect_active
     if collect_active:
-        print('appending data')
+
         signal_buffer.append(imu.accel)
 
+    threading.Timer(sample_rate, add_to_buffer).start()
 
-# background timer object
-signal_timer = threading.Timer(sample_rate, add_to_buffer).start()
+
+# kick off background timer object
+threading.Timer(sample_rate, add_to_buffer).start()
 
 @app.route('/')
 def hello_world():
