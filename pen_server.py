@@ -12,7 +12,7 @@ socketio = SocketIO(app)
 imu = mpu9250(mpu_addr=0x69)
 
 # global variables
-sample_rate = 1.0/320.0  # seconds
+sample_rate = 1.0/2000.0  # seconds
 signal_buffer = []
 collect_active = False
 
