@@ -78,7 +78,7 @@ def stop_data_collection():
     # stop the timer
     collect_active = False
 
-    return signal_buffer
+    return str(signal_buffer)
 
 
 if __name__ == '__main__':
