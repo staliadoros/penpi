@@ -12,7 +12,7 @@ socketio = SocketIO(app)
 imu = mpu9250(mpu_addr=0x69)
 
 # global variables
-sample_rate = 1.0/80.0  # seconds
+sample_rate = 1.0/160.0  # seconds
 signal_buffer = []
 collect_active = False
 
@@ -22,7 +22,6 @@ def add_to_buffer():
 
     global collect_active
     if collect_active:
-
         signal_buffer.append(imu.accel)
 
     threading.Timer(sample_rate, add_to_buffer).start()
@@ -84,7 +83,7 @@ def stop_data_collection():
     # stop the timer
     collect_active = False
 
-    return str(signal_buffer)
+    return '\n'.join([str(data) for data in signal_buffer])
 
 
 if __name__ == '__main__':
