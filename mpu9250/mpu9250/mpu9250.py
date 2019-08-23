@@ -59,6 +59,7 @@ AK8963_ST2   = 0x09
 AK8963_ASTC  = 0x0C
 ASTC_SELF    = 0x01<<6
 
+
 class mpu9250(object):
 	def __init__(self, bus=1, mpu_addr=0x68):
 		"""
@@ -77,9 +78,9 @@ class mpu9250(object):
 				GYRO_CONFIG: AK8963_14BIT | AK8963_100HZ
 			}
 		"""
-                global MPU9250_ADDRESS
+		global MPU9250_ADDRESS
 		self.bus        = smbus.SMBus(bus)
-                MPU9250_ADDRESS = mpu_addr
+		MPU9250_ADDRESS = mpu_addr
 
 		# let's double check we have the correct device address
 		ret = self.read8(MPU9250_ADDRESS, WHO_AM_I)
@@ -184,4 +185,4 @@ class mpu9250(object):
 		data=self.read_xyz(AK8963_ADDRESS, MAGNET_DATA, self.mlsb)
 		self.read8(AK8963_ADDRESS,AK8963_ST2) # needed step for reading magnetic data
 		return data
-	
+

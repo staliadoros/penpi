@@ -80,7 +80,14 @@ function streamData(raw_data) {
         var dimension = 'x';
         dimension = String.fromCharCode(dimension.charCodeAt(0) + i);
         var sigma_str = "&sigma;<sub>" + dimension.toString() + "</sub> ";
+
+        // THE MAGIC HAPPENS HERE -- HERE IS WHERE WE TAKE THE NUMBERS AND TURN THEM INTO COOL FUCKIN SHIT DAWG
+
         var sigma_val = math.round(math.std(window.myLine.data.datasets[i].data), 6).toString();
+
+
+        // YOU PASSED THE MAGIC, LOOK UP DUMMY!!
+
         document.getElementById("uc-stats-value-" + dimension).innerHTML = sigma_str + sigma_val;
     }
 
