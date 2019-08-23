@@ -20,10 +20,12 @@ collect_active = False
 # background timer function
 def add_to_buffer():
 
+    print ('calling timer')
     global collect_active
     if collect_active:
         print('appending data')
         signal_buffer.append(imu.accel)
+
 
 # background timer object
 signal_timer = threading.Timer(sample_rate, add_to_buffer).start()
